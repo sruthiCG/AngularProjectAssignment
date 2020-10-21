@@ -1,0 +1,33 @@
+<section class="container">
+  <h1>Employee Details</h1>
+  <p-button label="Create Employee" (onClick)="addEmployee()"></p-button>
+  <hr>
+  <p-table #dt [columns]="cols" [value]="employeeData" selectionMode="single" (onRowSelect)="onRowSelect($event)" [paginator]="true"
+    [rows]="5" (sortFunction)="customSort($event)" [customSort]="true">
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+          {{col.header}}
+          <p-sortIcon [field]="col.field"></p-sortIcon>
+        </th>
+        <th>Actions</th>
+      </tr>
+      <tr>
+        <th *ngFor="let col of columns" [ngSwitch]="col.field">
+          <input *ngSwitchCase="'name'" pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains')" />
+        </th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowdata let-columns="columns">
+      <tr [pSelectableRow]="rowdata">
+        <td *ngFor="let col of columns" pTooltip="Show Details" tooltipPosition="bottom">{{rowdata[col.field]}}
+        </td>
+        <td>
+          <p-button label="Delete" (onClick)="deleteEmployee(rowdata)"></p-button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</section>
+<p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
